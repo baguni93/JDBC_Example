@@ -3,7 +3,7 @@ package org.scoula.jdbc_ex.test;
 import org.junit.jupiter.api.*;
 import org.scoula.jdbc_ex.common.JDBCUtil;
 
-import java.sql.Connection;
+import java.sql.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CrudTest {
@@ -19,9 +19,39 @@ public class CrudTest {
     @Test
     @DisplayName("insert user")
     @Order(1)
-    public void insertUser(){
+    public void insertUser() throws SQLException {
+
+        String sql = "insert into users values(?,?,?,?)";
+
+        try(PreparedStatement pstmt = connection.prepareStatement(sql))
+        {
+            pstmt.setString(1,"user16");
+            pstmt.setString(2,"user13");
+            pstmt.setString(3,"user14");
+            pstmt.setString(4,"user15");
+
+            int count = pstmt.executeUpdate();
+
+            Assertions.assertEquals(1, count);
+        }
 
     }
 
+    @Test
+    @DisplayName("select user")
+    @Order(2)
+    public void selectUserAll() throws SQLException {
+
+        String sql = "select * from users";
+
+        try(Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(sql)){
+            while(rs.next())
+            {
+                String username = rs.getString("name");
+                System.out.println(username);
+            }
+        }
+    }
 
 }
