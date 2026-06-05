@@ -1,0 +1,48 @@
+CREATE DATABASE jdbc_ex2;
+
+-- user 생성은 한번만
+-- CREATE USER 'scoula'@'%' IDENTIFIED BY '1234';
+-- GRANT ALL PRIVILEGES ON jdbc_ex2.* TO 'scoula'@'%';
+
+use jdbc_ex2;
+
+CREATE TABLE USERS (
+ ID VARCHAR(12) NOT NULL PRIMARY KEY,
+ PASSWORD VARCHAR(12) NOT NULL,
+ NAME VARCHAR(30) NOT NULL,
+ ROLE VARCHAR(6) NOT NULL
+ );
+ 
+ INSERT INTO USERS(ID, PASSWORD, NAME, ROLE)
+ VALUES('guest', 'guest123', '방문자', 'USER');
+ INSERT INTO USERS(ID, PASSWORD, NAME, ROLE)
+ VALUES('admin', 'admin123', '관리자', 'ADMIN');
+ INSERT INTO USERS(ID, PASSWORD, NAME, ROLE)
+ VALUES('member', 'member123', '일반회원', 'USER');
+ 
+ SELECT * FROM USERS;
+
+DROP TABLE POINTS;
+CREATE TABLE POINTS (
+        POINT_ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+        USER_ID VARCHAR(12) NOT NULL,
+        POINT INT NOT NULL,
+        REASON VARCHAR(30) NOT NULL,
+        CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        CONSTRAINT FK_POINTS_USER
+            FOREIGN KEY (USER_ID)
+                REFERENCES USERS(ID)
+);
+
+
+delete from points;
+INSERT INTO POINTS
+(USER_ID, POINT, REASON)
+VALUES
+    ('guest', 500, '회원가입'),
+    ('admin', 10000, '관리자지급'),
+    ('member', 3000, '회원가입'),
+    ('member', 5000, '출석체크'),
+    ('member', 2500, '이벤트참여');
+select * from points;
